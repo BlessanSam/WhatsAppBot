@@ -1,7 +1,24 @@
 from flask import Flask, request
-import json
+import json,os,psycopg2
 
 app = Flask(__name__)
+
+# Get the database URL from the environment
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# Connect to the database
+conn = psycopg2.connect(DATABASE_URL)
+cursor = conn.cursor()
+
+# Example: Create a table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS phone_numbers (
+    id SERIAL PRIMARY KEY,
+    phone_number VARCHAR(15),
+    message TEXT
+)
+""")
+conn.commit()
 
 # Configuration
 VERIFY_TOKEN = 'whatsapp_1234'  # Token to verify webhook
@@ -9,6 +26,20 @@ VERIFY_TOKEN = 'whatsapp_1234'  # Token to verify webhook
 # Path to JSON file
 JSON_FILE = "phone_numbers.json"
 
+# Function to check if a phone number already exists
+def is_phone_number_exists(phone_number):
+    cursor.execute("SELECT id FROM phone_numbers WHERE phone_number = %s", (phone_number,))
+    return cursor.fetchone() is not None
+    
+# Example: Function to save phone number and message
+def save_phone_number(phone_number):
+if not is_phone_number_exists(phone_number):
+        cursor.execute("INSERT INTO phone_numbers (phone_number) VALUES (%s)", (phone_number,))
+        conn.commit()
+        print(f"Phone number {phone_number} added to the database.")
+    else:
+        print(f"Phone number {phone_number} is already in the database.")
+'''    
 # Function to save a phone number to the JSON file
 def save_phone_number(phone_number):
     try:
@@ -31,7 +62,7 @@ def save_phone_number(phone_number):
         print(f"Phone number {phone_number} saved to {JSON_FILE}.")
     else:
         print(f"Phone number {phone_number} is already in the file, skipping.")
-
+'''
 @app.route('/webhook', methods=['GET','POST'])
 def webhook():
     if request.method == 'GET':
@@ -52,4 +83,4 @@ def webhook():
     return "OK",200
 
 if __name__ == "__main__":
-    app.run(port=5000)
+    app.run()
