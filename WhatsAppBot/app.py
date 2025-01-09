@@ -78,6 +78,7 @@ def webhook():
         try:
             phone_number = data['entry'][0]['changes'][0]['value']['contacts'][0]['wa_id']  # Extract the phone number
             save_phone_number(phone_number)  # Save it to the JSON file
+            view_numbers()
         except Exception as e:
             print(f"Error processing webhook data: {e}")
     return "OK",200
