@@ -82,5 +82,10 @@ def webhook():
             print(f"Error processing webhook data: {e}")
     return "OK",200
 
+def view_numbers():
+    cursor.execute("SELECT * FROM phone_numbers")
+    data = cursor.fetchall()
+    return jsonify(data)
+
 if __name__ == "__main__":
     app.run()
