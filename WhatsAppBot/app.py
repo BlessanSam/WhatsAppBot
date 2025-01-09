@@ -33,10 +33,10 @@ def is_phone_number_exists(phone_number):
     
 # Example: Function to save phone number and message
 def save_phone_number(phone_number):
-if not is_phone_number_exists(phone_number):
-        cursor.execute("INSERT INTO phone_numbers (phone_number) VALUES (%s)", (phone_number,))
-        conn.commit()
-        print(f"Phone number {phone_number} added to the database.")
+    if not is_phone_number_exists(phone_number):
+            cursor.execute("INSERT INTO phone_numbers (phone_number) VALUES (%s)", (phone_number,))
+            conn.commit()
+            print(f"Phone number {phone_number} added to the database.")
     else:
         print(f"Phone number {phone_number} is already in the database.")
 '''    
