@@ -4,7 +4,7 @@ import json
 app = Flask(__name__)
 
 # Configuration
-# VERIFY_TOKEN = 'whatsapp_1234'  # Token to verify webhook
+VERIFY_TOKEN = 'whatsapp_1234'  # Token to verify webhook
 
 # Path to JSON file
 JSON_FILE = "phone_numbers.json"
@@ -32,15 +32,14 @@ def save_phone_number(phone_number):
     else:
         print(f"Phone number {phone_number} is already in the file, skipping.")
 
-@app.route('/webhook', methods=['POST'])
+@app.route('/webhook', methods=['GET','POST'])
 def webhook():
-    '''
     if request.method == 'GET':
         # Webhook verification with Meta
         if request.args.get("hub.verify_token") == VERIFY_TOKEN:
             return request.args.get("hub.challenge")
         return "Verification failed", 403
-    '''
+        
     # Handle incoming messages
     if request.method == 'POST':
         data = request.json
