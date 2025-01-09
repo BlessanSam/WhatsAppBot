@@ -88,9 +88,4 @@ if __name__ == "__main__":
 
 @app.route("/view-numbers", methods=["GET"])
 def view_numbers():
-    try:
-        cursor.execute("SELECT * FROM phone_numbers")
-        data = cursor.fetchall()
-        return jsonify(data)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    return "Hello world"
