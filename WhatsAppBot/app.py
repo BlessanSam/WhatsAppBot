@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import json,os,psycopg2
 
 app = Flask(__name__)
